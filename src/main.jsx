@@ -113,29 +113,43 @@ const App = () => {
 
   const deleteMoment = (index) => setMoments(moments.filter((_, i) => i !== index));
 
-  const saveMatch = async () => {
-    if (!matchName) return;
-    const { error } = await supabase.from("matches").upsert([
-      {
-        name: matchName,
-        moments: moments,
-      },
-    ]);
-    if (error) {
-      console.error("Fout bij opslaan:", error.message);
-    } else {
-      loadMatches();
-    }
-  };
+const saveMatch = async () => {
+  if (!matchName || !videoId) return;
 
-  const loadMatches = async () => {
-    const { data, error } = await supabase.from("matches").select("name");
-    if (error) {
-      console.error("Fout bij ophalen:", error.message);
-    } else {
-      setSavedMatches(data.map((m) => m.name));
+  const { error } = await supabase.from("matches").upsert({
+    name: matchName,
+    moments,
+    video_id: videoId
+  });
+
+  if (error) {
+    console.error("Fout bij opslaan:", error.message);
+  } else {
+    console.log("Wedstrijd opgeslagen.");
+    if (!savedMatches.includes(matchName)) {
+      setSavedMatches([...savedMatches, matchName]);
     }
-  };
+  }
+};
+
+
+ const loadMatch = async (name) => {
+  const { data, error } = await supabase.from("matches").select().eq("name", name).single();
+
+  if (error) {
+    console.error("Fout bij ophalen:", error.message);
+    return;
+  }
+
+  setMoments(data.moments || []);
+  setMatchName(data.name);
+  setVideoId(data.video_id || "");
+
+  if (data.video_id) {
+    setTimeout(() => handleVideoLoad(), 300); // even wachten tot videoId is gezet
+  }
+};
+
 
   const loadMatch = async (name) => {
     const { data, error } = await supabase
