@@ -1,4 +1,3 @@
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -9,7 +8,18 @@ const App = () => {
   const [matchName, setMatchName] = React.useState("");
   const [savedMatches, setSavedMatches] = React.useState([]);
 
-  const labels = ["Doelpunt voor", "Doelpunt tegen", "Balverlies", "Balwinst", "Schot op doel NL", "Aanval NL", "Aanval Tegenstander", "Verdediging NL", "Verdediging Tegenstander", "Overtreding"];
+  const labels = [
+    "Doelpunt NL",
+    "Tegendoelpunt",
+    "Schot NL",
+    "Schot tegen",
+    "Balwinst",
+    "Balverlies",
+    "Start aanval NL",
+    "Start tegenaanval",
+    "Verdedigingsmoment NL",
+    "Verdedigingsmoment tegen"
+  ];
 
   React.useEffect(() => {
     const handleKeyDown = (e) => {
@@ -19,15 +29,16 @@ const App = () => {
 
       const key = e.key.toLowerCase();
       const map = {
-        '1': 'Doelpunt voor',
-        '2': 'Doelpunt tegen',
+        '1': 'Doelpunt NL',
+        '2': 'Tegendoelpunt',
         '3': 'Balverlies',
         '4': 'Balwinst',
-        '5': 'Schot op doel NL',
-        'a': 'Aanval NL',
-        's': 'Aanval Tegenstander',
-        'd': 'Verdediging NL',
-        'f': 'Verdediging Tegenstander',
+        '5': 'Schot NL',
+        '6': 'Schot tegen',
+        'a': 'Start aanval NL',
+        's': 'Start tegenaanval',
+        'd': 'Verdedigingsmoment NL',
+        'f': 'Verdedigingsmoment tegen',
       };
 
       if (key === 'w') {
@@ -143,54 +154,51 @@ const App = () => {
     a.click();
   };
 
-  const buttonStyle = {
+  const buttonStyle = (color = "#f3f3f3", large = false) => ({
     margin: "5px",
-    padding: "8px 12px",
+    padding: large ? "12px 18px" : "8px 12px",
     borderRadius: "8px",
     border: "1px solid #aaa",
-    background: "#f3f3f3",
-    cursor: "pointer"
-  };
+    background: color,
+    cursor: "pointer",
+    minWidth: large ? "180px" : undefined
+  });
 
   return (
     <div style={{ fontFamily: "sans-serif", padding: 20 }}>
       <h1>Video Analyse NL</h1>
       <input type="text" placeholder="YouTube link plakken..." value={videoId} onChange={(e) => setVideoId(e.target.value)} style={{ width: "100%", marginBottom: 10 }} />
-      <button onClick={handleVideoLoad} style={{ ...buttonStyle, background: "#007bff", color: "#fff" }}>🎬 Laad video</button>
+      <button onClick={handleVideoLoad} style={buttonStyle("#007bff", true)}>🎬 Laad video</button>
 
       <div style={{ display: "flex", alignItems: "flex-start", gap: "20px", marginTop: 20 }}>
         <div style={{ flex: 3 }}>
           <div style={{ position: "relative", paddingTop: "56.25%" }}>
-            <div style={{
-  position: "absolute",
-  top: 10,
-  left: 10,
-  right: 10,
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "8px",
-  zIndex: 10
-}}>
-  <button onClick={() => markMoment("")} style={buttonStyle}>Markeer moment</button>
-  <button onClick={() => markMoment("", true)} style={buttonStyle}>Markeer + pauzeer</button>
-  <button onClick={() => markMoment("Doelpunt voor")} style={buttonStyle}>Doelpunt voor</button>
-  <button onClick={() => markMoment("Doelpunt tegen")} style={buttonStyle}>Doelpunt tegen</button>
-  <button onClick={() => markMoment("Balverlies")} style={buttonStyle}>Balverlies</button>
-  <button onClick={() => markMoment("Balwinst")} style={buttonStyle}>Balwinst</button>
-  <button onClick={() => markMoment("Schot op doel NL")} style={buttonStyle}>Schot op doel NL</button>
-  <button onClick={() => markMoment("Aanval NL")} style={buttonStyle}>Aanval NL</button>
-  <button onClick={() => markMoment("Aanval Tegenstander")} style={buttonStyle}>Aanval Tegenstander</button>
-  <button onClick={() => markMoment("Verdediging NL")} style={buttonStyle}>Verdediging NL</button>
-  <button onClick={() => markMoment("Verdediging Tegenstander")} style={buttonStyle}>Verdediging Tegenstander</button>
-</div>
             <div id="player-container" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}></div>
+          </div>
+
+          <div style={{ marginTop: 10 }}>
+            <button onClick={() => markMoment("")} style={buttonStyle("#ddd", true)}>➕ Markeer moment</button>
+            <button onClick={() => markMoment("", true)} style={buttonStyle("#ddd", true)}>⏸️ Markeer + pauze</button>
+
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <button onClick={() => markMoment("Doelpunt NL")} style={buttonStyle("#d4edda")}>Doelpunt NL</button>
+              <button onClick={() => markMoment("Tegendoelpunt")} style={buttonStyle("#f8d7da")}>Tegendoelpunt</button>
+              <button onClick={() => markMoment("Schot NL")} style={buttonStyle("#d4edda")}>Schot NL</button>
+              <button onClick={() => markMoment("Schot tegen")} style={buttonStyle("#f8d7da")}>Schot tegen</button>
+              <button onClick={() => markMoment("Balwinst")} style={buttonStyle("#d4edda")}>Balwinst</button>
+              <button onClick={() => markMoment("Balverlies")} style={buttonStyle("#f8d7da")}>Balverlies</button>
+              <button onClick={() => markMoment("Start aanval NL")} style={buttonStyle("#d4edda")}>Start aanval NL</button>
+              <button onClick={() => markMoment("Start tegenaanval")} style={buttonStyle("#f8d7da")}>Start tegenaanval</button>
+              <button onClick={() => markMoment("Verdedigingsmoment NL")} style={buttonStyle("#d4edda")}>Verdedigingsmoment NL</button>
+              <button onClick={() => markMoment("Verdedigingsmoment tegen")} style={buttonStyle("#f8d7da")}>Verdedigingsmoment tegen</button>
+            </div>
           </div>
 
           <h3>Gemarkeerde momenten:</h3>
           <ul>
             {moments.map((m, i) => (
               <li key={i}>
-                <button onClick={() => jumpTo(m.time)} style={{ marginRight: 5, ...buttonStyle }}>{formatTime(m.time)}</button>
+                <button onClick={() => jumpTo(m.time)} style={{ marginRight: 5, ...buttonStyle() }}>{formatTime(m.time)}</button>
                 <select value={m.label} onChange={(e) => updateLabel(i, e.target.value)}>
                   <option value="">-- Kies label --</option>
                   {labels.map((l, j) => <option key={j} value={l}>{l}</option>)}
@@ -203,13 +211,13 @@ const App = () => {
             ))}
           </ul>
 
-          <button onClick={download} style={buttonStyle}>📥 Download JSON</button>
+          <button onClick={download} style={buttonStyle()}>📥 Download JSON</button>
         </div>
 
         <div style={{ flex: 1 }}>
           <input type="text" placeholder="Wedstrijdnaam..." value={matchName} onChange={(e) => setMatchName(e.target.value)} style={{ width: "100%" }} />
-          <button onClick={saveMatch} disabled={!matchName} style={buttonStyle}>💾 Opslaan</button>
-          <button onClick={loadMatches} style={buttonStyle}>📂 Bekijk opgeslagen</button>
+          <button onClick={saveMatch} disabled={!matchName} style={buttonStyle()}>💾 Opslaan</button>
+          <button onClick={loadMatches} style={buttonStyle()}>📂 Bekijk opgeslagen</button>
           {savedMatches.length > 0 && (
             <ul>
               {savedMatches.map((m, i) => (
@@ -222,7 +230,7 @@ const App = () => {
             </ul>
           )}
           <div style={{ marginTop: "20px" }}>
-            <img src="/sneltoetsen_legenda.png" alt="/Sneltoetsen legenda" style={{ width: "100%", maxWidth: "350px", borderRadius: "8px", border: "1px solid #ccc" }} />
+            <img src="/sneltoetsen_legenda.png" alt="Sneltoetsen legenda" style={{ width: "100%", maxWidth: "350px", borderRadius: "8px", border: "1px solid #ccc" }} />
           </div>
         </div>
       </div>
