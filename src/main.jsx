@@ -222,7 +222,7 @@ const renderLegend = () => (
       <li><strong>F</strong>: Verdedigingsmoment tegen</li>
       <li><strong>W</strong>: Markeer moment</li>
       <li><strong>E</strong>: Markeer + pauze</li>
-      <li><strong>Spatie</strong>: Start video</li>
+      <li><strong>Spatie</strong>: Start video als deze gepauzeeerd is</li>
     </ul>
   </div>
 );
