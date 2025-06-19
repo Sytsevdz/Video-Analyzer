@@ -174,6 +174,20 @@ const App = () => {
         <div style={{ flex: 3 }}>
           <div style={{ position: "relative", paddingTop: "56.25%" }}>
             <div id="player-container" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}></div>
+<div style={{
+  position: "absolute",
+  top: "10px",
+  left: "10px",
+  right: "10px",
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  zIndex: 2,
+  justifyContent: "center",
+  pointerEvents: "none"
+}}>
+  {renderFloatingButtons()}
+</div>
           </div>
 
           <div style={{ marginTop: 10 }}>
