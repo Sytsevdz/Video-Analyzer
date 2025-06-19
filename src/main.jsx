@@ -198,6 +198,34 @@ const App = () => {
       <button onClick={() => markMoment("Verdedigingsmoment tegen")} style={buttonStyle("#f8d7da")}>Verdedigingsmoment tegen</button>
     </>
   );
+  
+const renderLegend = () => (
+  <div style={{
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    padding: "10px",
+    background: "#f9f9f9",
+    fontSize: "14px",
+    lineHeight: "1.6"
+  }}>
+    <h4 style={{ marginTop: 0 }}>🎮 Sneltoetsen</h4>
+    <ul style={{ paddingLeft: "20px" }}>
+      <li><strong>1</strong>: Doelpunt NL</li>
+      <li><strong>2</strong>: Tegendoelpunt</li>
+      <li><strong>3</strong>: Schot NL</li>
+      <li><strong>4</strong>: Schot tegen</li>
+      <li><strong>5</strong>: Balwinst</li>
+      <li><strong>6</strong>: Balverlies</li>
+      <li><strong>A</strong>: Start aanval NL</li>
+      <li><strong>S</strong>: Start tegenaanval</li>
+      <li><strong>D</strong>: Verdedigingsmoment NL</li>
+      <li><strong>F</strong>: Verdedigingsmoment tegen</li>
+      <li><strong>W</strong>: Markeer moment</li>
+      <li><strong>E</strong>: Markeer + pauze</li>
+      <li><strong>Spatie</strong>: Start video</li>
+    </ul>
+  </div>
+);
 
   return (
     <div style={{ fontFamily: "sans-serif", padding: 20 }}>
@@ -265,7 +293,7 @@ const App = () => {
             </ul>
           )}
           <div style={{ marginTop: "20px" }}>
-            <img src="/sneltoetsen_legenda.png" alt="Sneltoetsen legenda" style={{ width: "100%", maxWidth: "350px", borderRadius: "8px", border: "1px solid #ccc" }} />
+            {renderLegend()}
           </div>
         </div>
       </div>
