@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { supabase } from "./supabaseClient";
 
 const App = () => {
   const [videoId, setVideoId] = React.useState("");
@@ -112,30 +113,52 @@ const App = () => {
 
   const deleteMoment = (index) => setMoments(moments.filter((_, i) => i !== index));
 
-  const saveMatch = () => {
+  const saveMatch = async () => {
     if (!matchName) return;
-    localStorage.setItem("match_" + matchName, JSON.stringify(moments));
-    if (!savedMatches.includes(matchName)) {
-      setSavedMatches([...savedMatches, matchName]);
+    const { error } = await supabase.from("matches").upsert([
+      {
+        name: matchName,
+        moments: moments,
+      },
+    ]);
+    if (error) {
+      console.error("Fout bij opslaan:", error.message);
+    } else {
+      loadMatches();
     }
   };
 
-  const loadMatches = () => {
-    const keys = Object.keys(localStorage).filter(k => k.startsWith("match_")).map(k => k.replace("match_", ""));
-    setSavedMatches(keys);
+  const loadMatches = async () => {
+    const { data, error } = await supabase.from("matches").select("name");
+    if (error) {
+      console.error("Fout bij ophalen:", error.message);
+    } else {
+      setSavedMatches(data.map((m) => m.name));
+    }
   };
 
-  const loadMatch = (name) => {
-    const data = localStorage.getItem("match_" + name);
-    if (data) {
-      setMoments(JSON.parse(data));
+  const loadMatch = async (name) => {
+    const { data, error } = await supabase
+      .from("matches")
+      .select("*")
+      .eq("name", name)
+      .single();
+
+    if (error) {
+      console.error("Fout bij laden:", error.message);
+    } else {
+      setMoments(data.moments);
       setMatchName(name);
     }
   };
 
-  const deleteMatch = (name) => {
-    localStorage.removeItem("match_" + name);
-    setSavedMatches(savedMatches.filter(m => m !== name));
+  const deleteMatch = async (name) => {
+    const { error } = await supabase.from("matches").delete().eq("name", name);
+    if (error) {
+      console.error("Fout bij verwijderen:", error.message);
+    } else {
+      loadMatches();
+    }
   };
 
   const download = () => {
