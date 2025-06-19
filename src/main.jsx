@@ -59,11 +59,11 @@ const App = () => {
   }, [player]);
 
   React.useEffect(() => {
-  if (shouldLoadVideo && videoId) {
-    handleVideoLoad();
-    setShouldLoadVideo(false); // reset zodat hij niet blijft triggeren
-  }
-}, [shouldLoadVideo, videoId]);
+    if (shouldLoadVideo && videoId) {
+      handleVideoLoad();
+      setShouldLoadVideo(false);
+    }
+  }, [shouldLoadVideo, videoId]);
 
   const handlePlayerReady = (event) => setPlayer(event.target);
 
@@ -121,42 +121,38 @@ const App = () => {
 
   const deleteMoment = (index) => setMoments(moments.filter((_, i) => i !== index));
 
-const saveMatch = async () => {
-  if (!matchName || !videoId) return;
+  const saveMatch = async () => {
+    if (!matchName || !videoId) return;
 
-  const { error } = await supabase.from("matches").upsert({
-    name: matchName,
-    moments,
-    video_id: videoId
-  });
+    const { error } = await supabase.from("matches").upsert({
+      name: matchName,
+      moments,
+      video_id: videoId
+    });
 
-  if (error) {
-    console.error("Fout bij opslaan:", error.message);
-  } else {
-    console.log("Wedstrijd opgeslagen.");
-    if (!savedMatches.includes(matchName)) {
-      setSavedMatches([...savedMatches, matchName]);
+    if (error) {
+      console.error("Fout bij opslaan:", error.message);
+    } else {
+      console.log("Wedstrijd opgeslagen.");
+      if (!savedMatches.includes(matchName)) {
+        setSavedMatches([...savedMatches, matchName]);
+      }
     }
-  }
-};
+  };
 
+  const loadMatch = async (name) => {
+    const { data, error } = await supabase.from("matches").select().eq("name", name).single();
 
- const loadMatch = async (name) => {
-  const { data, error } = await supabase.from("matches").select().eq("name", name).single();
+    if (error) {
+      console.error("Fout bij ophalen:", error.message);
+      return;
+    }
 
-  if (error) {
-    console.error("Fout bij ophalen:", error.message);
-    return;
-  }
-
-  setMoments(data.moments || []);
-  setMatchName(data.name);
-  setVideoId(data.video_id || "");
-
-  if (data.video_id) {
-    setTimeout(() => handleVideoLoad(), 300); // even wachten tot videoId is gezet
-  }
-};
+    setMoments(data.moments || []);
+    setMatchName(data.name);
+    setVideoId(data.video_id || "");
+    setShouldLoadVideo(true); // belangrijk!
+  };
 
   const deleteMatch = async (name) => {
     const { error } = await supabase.from("matches").delete().eq("name", name);
@@ -164,6 +160,15 @@ const saveMatch = async () => {
       console.error("Fout bij verwijderen:", error.message);
     } else {
       loadMatches();
+    }
+  };
+
+  const loadMatches = async () => {
+    const { data, error } = await supabase.from("matches").select("name");
+    if (error) {
+      console.error("Fout bij ophalen van lijst:", error.message);
+    } else {
+      setSavedMatches(data.map((d) => d.name));
     }
   };
 
