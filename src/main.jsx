@@ -140,7 +140,7 @@ const App = () => {
     }
   };
 
-  const loadMatch = async (name) => {
+  const handleLoadMatch = async (name) => {
     const { data, error } = await supabase.from("matches").select().eq("name", name).single();
 
     if (error) {
@@ -151,7 +151,7 @@ const App = () => {
     setMoments(data.moments || []);
     setMatchName(data.name);
     setVideoId(data.video_id || "");
-    setShouldLoadVideo(true); // belangrijk!
+    setShouldLoadVideo(true);
   };
 
   const deleteMatch = async (name) => {
@@ -160,15 +160,6 @@ const App = () => {
       console.error("Fout bij verwijderen:", error.message);
     } else {
       loadMatches();
-    }
-  };
-
-  const loadMatches = async () => {
-    const { data, error } = await supabase.from("matches").select("name");
-    if (error) {
-      console.error("Fout bij ophalen van lijst:", error.message);
-    } else {
-      setSavedMatches(data.map((d) => d.name));
     }
   };
 
@@ -257,13 +248,17 @@ const App = () => {
         <div style={{ flex: 1 }}>
           <input type="text" placeholder="Wedstrijdnaam..." value={matchName} onChange={(e) => setMatchName(e.target.value)} style={{ width: "100%" }} />
           <button onClick={saveMatch} disabled={!matchName} style={buttonStyle()}>💾 Opslaan</button>
-          <button onClick={loadMatches} style={buttonStyle()}>📂 Bekijk opgeslagen</button>
+          <button onClick={() => {
+            supabase.from("matches").select("name").then(({ data }) => {
+              setSavedMatches(data.map((m) => m.name));
+            });
+          }} style={buttonStyle()}>📂 Bekijk opgeslagen</button>
           {savedMatches.length > 0 && (
             <ul>
               {savedMatches.map((m, i) => (
                 <li key={i}>
                   <strong>{m}</strong>
-                  <button onClick={() => loadMatch(m)} style={{ marginLeft: 10 }}>Laden</button>
+                  <button onClick={() => handleLoadMatch(m)} style={{ marginLeft: 10 }}>Laden</button>
                   <button onClick={() => deleteMatch(m)} style={{ marginLeft: 5, color: "red" }}>🗑️</button>
                 </li>
               ))}
