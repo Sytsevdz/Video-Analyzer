@@ -161,6 +161,28 @@ const App = () => {
       <div style={{ display: "flex", alignItems: "flex-start", gap: "20px", marginTop: 20 }}>
         <div style={{ flex: 3 }}>
           <div style={{ position: "relative", paddingTop: "56.25%" }}>
+            <div style={{
+  position: "absolute",
+  top: 10,
+  left: 10,
+  right: 10,
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "8px",
+  zIndex: 10
+}}>
+  <button onClick={() => markMoment("Doelpunt voor")} style={buttonStyle}>1 – Doelpunt voor</button>
+  <button onClick={() => markMoment("Doelpunt tegen")} style={buttonStyle}>2 – Doelpunt tegen</button>
+  <button onClick={() => markMoment("Balverlies")} style={buttonStyle}>3 – Balverlies</button>
+  <button onClick={() => markMoment("Balwinst")} style={buttonStyle}>4 – Balwinst</button>
+  <button onClick={() => markMoment("Schot op doel NL")} style={buttonStyle}>5 – Schot op doel NL</button>
+  <button onClick={() => markMoment("Aanval NL")} style={buttonStyle}>A – Aanval NL</button>
+  <button onClick={() => markMoment("Aanval Tegenstander")} style={buttonStyle}>S – Aanval Tegenstander</button>
+  <button onClick={() => markMoment("Verdediging NL")} style={buttonStyle}>D – Verdediging NL</button>
+  <button onClick={() => markMoment("Verdediging Tegenstander")} style={buttonStyle}>F – Verdediging Tegenstander</button>
+  <button onClick={() => markMoment("")} style={buttonStyle}>W – Markeer moment</button>
+  <button onClick={() => markMoment("", true)} style={buttonStyle}>E – Markeer + pauzeer</button>
+</div>
             <div id="player-container" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}></div>
           </div>
 
