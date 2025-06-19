@@ -8,6 +8,7 @@ const App = () => {
   const [moments, setMoments] = React.useState([]);
   const [matchName, setMatchName] = React.useState("");
   const [savedMatches, setSavedMatches] = React.useState([]);
+  const [shouldLoadVideo, setShouldLoadVideo] = React.useState(false);
 
   const labels = [
     "Doelpunt NL",
@@ -56,6 +57,13 @@ const App = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [player]);
+
+  React.useEffect(() => {
+  if (shouldLoadVideo && videoId) {
+    handleVideoLoad();
+    setShouldLoadVideo(false); // reset zodat hij niet blijft triggeren
+  }
+}, [shouldLoadVideo, videoId]);
 
   const handlePlayerReady = (event) => setPlayer(event.target);
 
