@@ -150,22 +150,6 @@ const saveMatch = async () => {
   }
 };
 
-
-  const loadMatch = async (name) => {
-    const { data, error } = await supabase
-      .from("matches")
-      .select("*")
-      .eq("name", name)
-      .single();
-
-    if (error) {
-      console.error("Fout bij laden:", error.message);
-    } else {
-      setMoments(data.moments);
-      setMatchName(name);
-    }
-  };
-
   const deleteMatch = async (name) => {
     const { error } = await supabase.from("matches").delete().eq("name", name);
     if (error) {
