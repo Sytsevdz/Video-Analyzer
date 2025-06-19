@@ -1,4 +1,3 @@
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -26,7 +25,7 @@ const App = () => {
     const handleKeyDown = (e) => {
       if (!player) return;
       const active = document.activeElement;
-      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.tagName === "SELECT")) return;
+      if (active && ["INPUT", "TEXTAREA", "SELECT"].includes(active.tagName)) return;
 
       const key = e.key.toLowerCase();
       const map = {
@@ -57,9 +56,7 @@ const App = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [player]);
 
-  const handlePlayerReady = (event) => {
-    setPlayer(event.target);
-  };
+  const handlePlayerReady = (event) => setPlayer(event.target);
 
   const handleVideoLoad = () => {
     const id = getYouTubeVideoId(videoId);
@@ -93,9 +90,7 @@ const App = () => {
     setMoments((prev) => [...prev, newMoment]);
   };
 
-  const jumpTo = (time) => {
-    if (player) player.seekTo(time, true);
-  };
+  const jumpTo = (time) => player && player.seekTo(time, true);
 
   const updateLabel = (index, newLabel) => {
     const updated = [...moments];
@@ -115,10 +110,7 @@ const App = () => {
     setMoments(updated);
   };
 
-  const deleteMoment = (index) => {
-    const updated = moments.filter((_, i) => i !== index);
-    setMoments(updated);
-  };
+  const deleteMoment = (index) => setMoments(moments.filter((_, i) => i !== index));
 
   const saveMatch = () => {
     if (!matchName) return;
@@ -165,6 +157,23 @@ const App = () => {
     minWidth: large ? "180px" : undefined
   });
 
+  const renderFloatingButtons = () => (
+    <>
+      <button onClick={() => markMoment("")} style={buttonStyle("#ddd", true)}>➕ Markeer moment</button>
+      <button onClick={() => markMoment("", true)} style={buttonStyle("#ddd", true)}>⏸️ Markeer + pauze</button>
+      <button onClick={() => markMoment("Doelpunt NL")} style={buttonStyle("#d4edda")}>Doelpunt NL</button>
+      <button onClick={() => markMoment("Tegendoelpunt")} style={buttonStyle("#f8d7da")}>Tegendoelpunt</button>
+      <button onClick={() => markMoment("Schot NL")} style={buttonStyle("#d4edda")}>Schot NL</button>
+      <button onClick={() => markMoment("Schot tegen")} style={buttonStyle("#f8d7da")}>Schot tegen</button>
+      <button onClick={() => markMoment("Balwinst")} style={buttonStyle("#d4edda")}>Balwinst</button>
+      <button onClick={() => markMoment("Balverlies")} style={buttonStyle("#f8d7da")}>Balverlies</button>
+      <button onClick={() => markMoment("Start aanval NL")} style={buttonStyle("#d4edda")}>Start aanval NL</button>
+      <button onClick={() => markMoment("Start tegenaanval")} style={buttonStyle("#f8d7da")}>Start tegenaanval</button>
+      <button onClick={() => markMoment("Verdedigingsmoment NL")} style={buttonStyle("#d4edda")}>Verdedigingsmoment NL</button>
+      <button onClick={() => markMoment("Verdedigingsmoment tegen")} style={buttonStyle("#f8d7da")}>Verdedigingsmoment tegen</button>
+    </>
+  );
+
   return (
     <div style={{ fontFamily: "sans-serif", padding: 20 }}>
       <h1>Video Analyse NL</h1>
@@ -175,37 +184,19 @@ const App = () => {
         <div style={{ flex: 3 }}>
           <div style={{ position: "relative", paddingTop: "56.25%" }}>
             <div id="player-container" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}></div>
-<div style={{
-  position: "absolute",
-  top: "10px",
-  left: "10px",
-  right: "10px",
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "10px",
-  zIndex: 2,
-  justifyContent: "center",
-  pointerEvents: "none"
-}}>
-  {renderFloatingButtons()}
-</div>
-          </div>
-
-          <div style={{ marginTop: 10 }}>
-            <button onClick={() => markMoment("")} style={buttonStyle("#ddd", true)}>➕ Markeer moment</button>
-            <button onClick={() => markMoment("", true)} style={buttonStyle("#ddd", true)}>⏸️ Markeer + pauze</button>
-
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-              <button onClick={() => markMoment("Doelpunt NL")} style={buttonStyle("#d4edda")}>Doelpunt NL</button>
-              <button onClick={() => markMoment("Tegendoelpunt")} style={buttonStyle("#f8d7da")}>Tegendoelpunt</button>
-              <button onClick={() => markMoment("Schot NL")} style={buttonStyle("#d4edda")}>Schot NL</button>
-              <button onClick={() => markMoment("Schot tegen")} style={buttonStyle("#f8d7da")}>Schot tegen</button>
-              <button onClick={() => markMoment("Balwinst")} style={buttonStyle("#d4edda")}>Balwinst</button>
-              <button onClick={() => markMoment("Balverlies")} style={buttonStyle("#f8d7da")}>Balverlies</button>
-              <button onClick={() => markMoment("Start aanval NL")} style={buttonStyle("#d4edda")}>Start aanval NL</button>
-              <button onClick={() => markMoment("Start tegenaanval")} style={buttonStyle("#f8d7da")}>Start tegenaanval</button>
-              <button onClick={() => markMoment("Verdedigingsmoment NL")} style={buttonStyle("#d4edda")}>Verdedigingsmoment NL</button>
-              <button onClick={() => markMoment("Verdedigingsmoment tegen")} style={buttonStyle("#f8d7da")}>Verdedigingsmoment tegen</button>
+            <div style={{
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              right: "10px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              zIndex: 2,
+              justifyContent: "center",
+              pointerEvents: "auto"
+            }}>
+              {renderFloatingButtons()}
             </div>
           </div>
 
