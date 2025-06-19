@@ -200,7 +200,7 @@ const App = () => {
             </ul>
           )}
           <div style={{ marginTop: "20px" }}>
-            <img src="/sneltoetsen_legenda.png" alt="Sneltoetsen legenda" style={{ width: "100%", maxWidth: "350px", borderRadius: "8px", border: "1px solid #ccc" }} />
+            <img src="/sneltoetsen_legenda.png" alt="/Sneltoetsen legenda" style={{ width: "100%", maxWidth: "350px", borderRadius: "8px", border: "1px solid #ccc" }} />
           </div>
         </div>
       </div>
